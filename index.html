@@ -24,31 +24,6 @@ button.g{background:#1a2836;color:#cfe6f5;font-size:14px;padding:9px 16px}button
 #stars{font-size:52px;color:#ffb43a;letter-spacing:8px}
 #fade{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .25s;z-index:4}
 #sb{position:fixed;left:10px;top:10px;z-index:10;display:flex;gap:6px}#sb button{margin:0;padding:6px 12px;font-size:13px}#hud[style*="block"]~#sb{left:18px;top:142px}
-#tc{position:fixed;inset:0;display:none;z-index:3;pointer-events:none}/* Virtual Joystick */
-#joyBase{position:fixed;left:calc(30px + env(safe-area-inset-left,0px));bottom:30px;width:140px;height:140px;
-  border-radius:50%;background:rgba(255,255,255,0.1);
-  border:2px solid rgba(255,255,255,0.3);z-index:100;
-  display:none;touch-action:none;backdrop-filter:blur(6px);pointer-events:auto;-webkit-tap-highlight-color:transparent}
-#joyKnob{position:absolute;left:50%;top:50%;width:60px;height:60px;
-  margin-left:-30px;margin-top:-30px;border-radius:50%;
-  background:rgba(255,255,255,0.5);border:2px solid rgba(255,255,255,0.8);
-  transition:transform 0.05s linear;pointer-events:none}
-/* Action Buttons */
-.mobBtn{position:fixed;width:80px;height:80px;border-radius:50%;padding:0;margin:0;box-shadow:none;transition:none;
-  background:rgba(255,255,255,0.15);border:2px solid rgba(255,255,255,0.5);
-  color:#fff;font-weight:900;font-size:13px;letter-spacing:1px;line-height:1.1;
-  display:none;touch-action:none;z-index:100;backdrop-filter:blur(6px);pointer-events:auto;
-  -webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
-.mobBtn.active{background:rgba(255,255,255,0.6);color:#111;transform:scale(0.93)}
-.mobBtn i{display:block;font-style:normal;font-size:22px;line-height:1.1}
-#btnJump{right:calc(30px + env(safe-area-inset-right,0px));bottom:30px;background:rgba(100,200,255,0.25);
-  border-color:rgba(100,200,255,0.7)}
-#btnDash{right:calc(120px + env(safe-area-inset-right,0px));bottom:50px;width:70px;height:70px;background:rgba(255,180,60,0.25);
-  border-color:rgba(255,180,60,0.7)}
-#btnAction{right:calc(30px + env(safe-area-inset-right,0px));bottom:130px;width:70px;height:70px;background:rgba(180,107,255,0.25);
-  border-color:rgba(180,107,255,0.7)}
-body.touch #joyBase,
-body.touch .mobBtn{display:block}
 .wl{width:100%;text-align:center;font-size:12px;letter-spacing:3px;opacity:.6;margin:10px 0 2px;color:#3fd0ff}.ctl{font-size:13px;opacity:.6;margin-top:16px}
 #hud{z-index:3}.ov{background:radial-gradient(circle at 50% 30%,#123049dd,#05080cf5)}
 #tcard{max-width:560px;width:90%;max-height:88vh;overflow:auto;background:linear-gradient(#142233f2,#0b1520f2);border:1px solid #3fd0ff88;border-radius:16px;padding:22px 28px;box-shadow:0 0 40px #3fd0ff33;font-size:17px;line-height:1.5}#tcard h2{margin:0 0 10px;color:#3fd0ff;letter-spacing:3px;font-size:22px}#tcard p{margin:8px 0}#tcard h3{color:#ffb43a;margin:16px 0 4px;letter-spacing:2px;font-size:16px}#tcard button{display:block;margin:16px auto 0}
@@ -72,6 +47,59 @@ body.touch #hint{bottom:auto;top:96px;font-size:16px}
 @media(max-height:520px){#fl{width:170px;padding:5px 10px}#tr{font-size:12px;padding:5px 10px}#stars{font-size:32px}#st{font-size:14px;margin:6px 0}h1{font-size:34px!important}#tcard{font-size:14px;padding:12px 16px}#pb{top:70px}button{padding:8px 18px;font-size:15px}}
 @media(max-width:640px){#fl{left:8px;top:8px;padding:5px 8px}#tr{right:8px;top:8px;font-size:11px;padding:5px 8px}#pb{left:8px;top:64px}body.touch #hint{top:112px;font-size:14px;padding:6px 12px}#bossbar{top:50px!important}.ctl{display:none}}
 @supports(padding:max(0px)){#fl{top:max(8px,env(safe-area-inset-top));left:max(8px,env(safe-area-inset-left))}#tr{top:max(8px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right))}#sb{left:max(10px,env(safe-area-inset-left));top:max(10px,env(safe-area-inset-top))}#pb{left:max(8px,env(safe-area-inset-left))}#tc{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right);padding-bottom:env(safe-area-inset-bottom)}}
+/* ============ Mobile Touch Controls v2 ============ */
+#mobWrap{position:fixed;inset:0;pointer-events:none;z-index:100;display:none}
+body.touch #mobWrap{display:block}
+
+.mobBtn{
+  position:absolute;border-radius:50%;padding:0;margin:0;box-shadow:none;
+  display:flex;align-items:center;justify-content:center;line-height:1.1;
+  color:#fff;font-weight:900;letter-spacing:1px;
+  border:2px solid rgba(255,255,255,0.5);
+  background:rgba(255,255,255,0.15);
+  touch-action:none;pointer-events:auto;
+  backdrop-filter:blur(6px);
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;-webkit-user-select:none;
+  transition:transform 0.08s, background 0.08s;
+}
+.mobBtn.active{
+  background:rgba(255,255,255,0.65);color:#111;
+  transform:scale(0.92);
+}
+
+/* ---- LEFT: movement ---- */
+.mobBtn.mv{width:80px;height:80px;font-size:24px;bottom:28px;opacity:0.75;
+  background:rgba(80,190,255,0.25);border-color:rgba(80,190,255,0.75)}
+#mobLeft{left:calc(20px + env(safe-area-inset-left,0px))}
+#mobRight{left:calc(110px + env(safe-area-inset-left,0px))}
+
+/* ---- RIGHT: primary actions (SLIDE, JUMP) ---- */
+.mobBtn.pri{width:90px;height:90px;font-size:13px;bottom:28px;opacity:0.8}
+#mobSlide{right:calc(120px + env(safe-area-inset-right,0px))}
+#mobJump{right:calc(20px + env(safe-area-inset-right,0px));background:rgba(100,200,255,0.25);
+  border-color:rgba(100,200,255,0.75);font-size:15px}
+
+/* ---- RIGHT: secondary actions (FLIP, DASH, ECHO) ---- */
+.mobBtn.sec{width:60px;height:60px;font-size:11px;bottom:135px;opacity:0.45}
+.mobBtn.sec.active{opacity:0.8}
+#mobFlip{right:calc(20px + env(safe-area-inset-right,0px));background:rgba(180,107,255,0.3);
+  border-color:rgba(180,107,255,0.7)}
+#mobDash{right:calc(90px + env(safe-area-inset-right,0px));background:rgba(255,180,60,0.3);
+  border-color:rgba(255,180,60,0.7)}
+#mobEcho{right:calc(160px + env(safe-area-inset-right,0px));background:rgba(70,255,208,0.3);
+  border-color:rgba(70,255,208,0.7)}
+
+/* Small screens - scale down */
+@media(max-width:520px){
+  .mobBtn.mv{width:68px;height:68px;bottom:20px;font-size:20px}
+  #mobRight{left:calc(96px + env(safe-area-inset-left,0px))}
+  .mobBtn.pri{width:78px;height:78px;bottom:20px;font-size:12px}
+  #mobSlide{right:calc(104px + env(safe-area-inset-right,0px))}
+  .mobBtn.sec{width:52px;height:52px;bottom:110px;font-size:10px}
+  #mobDash{right:calc(78px + env(safe-area-inset-right,0px))}
+  #mobEcho{right:calc(138px + env(safe-area-inset-right,0px))}
+}
 </style></head><body>
 <div id="webglError" style="display:none;">
   <div class="webgl-box">
@@ -168,7 +196,7 @@ var tips=['Tip: Q while running to flip onto the ceiling','Tip: R creates an ech
 <div id="nrs" style="display:none;position:fixed;left:50%;top:30%;transform:translate(-50%,-50%);z-index:11;pointer-events:none;text-align:center;color:#ffe070;font-size:clamp(28px,5vw,48px);font-weight:900;font-style:italic;letter-spacing:3px;text-shadow:0 0 30px #ffb43a,0 0 60px #ff6020;animation:nrs .35s ease-out"><span id="nrt">🏆 NEW RECORD!</span><div id="nrs2" style="font-size:18px;color:#eaf4ff;font-style:normal;letter-spacing:1px;margin-top:6px"></div></div><div id="fade"></div><div id="tst"></div><div id="wt"></div><div id="xo" class="ov" style="display:none;z-index:9"><div style="text-align:center"><h1 id="xt" style="font-size:clamp(30px,6vw,52px)"></h1><div style="margin-top:18px"><button class="adbtn adchoice" id="xok"></button></div><button class="adbtn adchoice" id="xno">NO THANKS</button></div></div><button class="g" id="pb">❚❚ PAUSE</button><div id="pm" class="ov"><h1 style="font-size:clamp(36px,7vw,64px)">PAUSED</h1><div class="sub">P / Esc = resume</div><button id="pres">RESUME</button><button class="g" id="prst">RESTART LEVEL</button><button class="g" id="pex">EXIT TO MENU</button><button class="g" id="pfs">⛶ FULLSCREEN</button></div><div id="rage" style="position:fixed;inset:0;pointer-events:none;background:radial-gradient(transparent 30%,#ff000066);opacity:0;transition:opacity .5s;z-index:2"></div><div id="bmsg" style="display:none;position:fixed;left:0;right:0;top:32%;text-align:center;z-index:7;pointer-events:none;font-size:clamp(34px,8vw,80px);font-weight:900;font-style:italic;letter-spacing:4px;background:linear-gradient(90deg,#f33,#fa3,#ff3,#3f6,#3cf,#a6f,#f3c);-webkit-background-clip:text;color:transparent;filter:drop-shadow(0 0 12px #000);animation:rb 1s linear infinite">DRAGON DEFEATED!</div>
 <div id="title" class="ov"><h1>ECHOFLIP</h1><div class="sub">Movement. Momentum. Gravity. Flow. Echo.</div><button id="play">PLAY</button><button id="endless">ENDLESS MODE</button><button id="daily">DAILY CHALLENGE</button><button class="g" id="howb">HOW TO PLAY</button><div id="mi"></div><div id="lv"></div><div id="su"></div><div class="ctl">A/D run &nbsp; SPACE jump (x2) &nbsp; SHIFT dash &nbsp; CTRL/S slide &nbsp; Q run on ceiling (flip gravity) &nbsp; R echo clone &nbsp; P pause &nbsp; H help &nbsp; M mute</div></div>
 <div id="end" class="ov"><div id="stars"></div><h1 id="et" style="font-size:44px">COMPLETE</h1><div id="bd"></div><div id="st"></div><div id="req"></div><div id="adw"></div><div><button id="nx">NEXT</button><button class="g" id="rt">RETRY</button><button class="g" id="mn">MENU</button></div></div>
-<div id="vg"></div><div id="dw"></div><div id="gd" class="ov" style="display:none;z-index:9"><div id="tcard"><h2 id="gt"></h2><div id="gb"></div><div id="gn"><button class="g" id="gbk">BACK</button><button id="gnx">NEXT</button><button class="g" id="gsk">SKIP</button></div></div></div><div id="tc"><div id="joyBase"><div id="joyKnob"></div></div><button class="mobBtn" id="btnJump">JUMP</button><button class="mobBtn" id="btnDash"><i>⚡</i>DASH</button><button class="mobBtn" id="btnAction"><i>⚡</i>DASH</button></div><div id="sb"><button id="mute" class="g">SOUND ON</button></div>
+<div id="vg"></div><div id="dw"></div><div id="gd" class="ov" style="display:none;z-index:9"><div id="tcard"><h2 id="gt"></h2><div id="gb"></div><div id="gn"><button class="g" id="gbk">BACK</button><button id="gnx">NEXT</button><button class="g" id="gsk">SKIP</button></div></div></div><div id="tc"></div><div id="mobWrap"><button class="mobBtn mv" id="mobLeft">◀</button><button class="mobBtn mv" id="mobRight">▶</button><button class="mobBtn pri" id="mobSlide">SLIDE</button><button class="mobBtn pri" id="mobJump">JUMP</button><button class="mobBtn sec" id="mobFlip">FLIP</button><button class="mobBtn sec" id="mobDash">DASH</button><button class="mobBtn sec" id="mobEcho">ECHO</button></div><div id="sb"><button id="mute" class="g">SOUND ON</button></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>window.THREE||document.write('<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"><\/script>')</script>
 <script>window.THREE||document.write('<script src="three.min.js"><\/script>')</script>
@@ -552,7 +580,7 @@ sun.position.set(q.x-8,16,14);sun.target.position.set(q.x,3,0);
 /* char */
 const pivY=q.y-q.gd*q.h/2;if(!dead)ch.root.visible=!(bossMode&&q.inv>0&&((t/90)|0)%2);ch.root.position.set(q.x,pivY,0);ch.root.rotation.x+=((q.gd>0?0:PI)-ch.root.rotation.x)*Math.min(1,dt*10);
 pose(ch,{run:q.g&&Math.abs(q.vx)>.8&&!q.sl?1:0,air:!q.g&&!q.dash,slide:q.sl,dash:q.dash>0,spd:Math.abs(q.vx),face:q.face,win:won,hurt:hurt>0},dt);fxFrame(dt,q,pivY);
-if(touch)updateTouchButtons();
+
 if(chGhost.root.visible&&echo&&echo.cur){const f=echo.cur;chGhost.root.position.set(f.x,f.y-f.gd*f.h/2,0);chGhost.root.rotation.x+=((f.gd>0?0:PI)-chGhost.root.rotation.x)*Math.min(1,dt*10);pose(chGhost,{run:f.g&&Math.abs(f.vx)>.8&&!f.sl?1:0,air:!f.g,slide:f.sl,spd:Math.abs(f.vx),face:f.vx>=0?1:-1},dt)}
 for(const s of L_.sh)if(!s.got){s.m.rotation.y+=dt*3;s.m.position.y=s.y+Math.sin(t/300+s.x)*.12}
 if(L_.fr)L_.fr.rotation.y+=dt*2;if(L_.bgm)L_.bgm.position.x=cam.userData.x*.5;for(const c of L_.ck){if(c.pu>0){c.pu=Math.max(0,c.pu-dt);c.l.scale.setScalar(1+c.pu*4)}else if(c.on&&c.l.scale.x!==1.3)c.l.scale.setScalar(1.3)}
@@ -605,48 +633,22 @@ document.addEventListener('visibilitychange',()=>{try{A&&(document.hidden?A.susp
 addEventListener('blur',()=>{for(const k in K)K[k]=0});
 /* touch */
 if(touch){document.body.classList.add('touch');
-const joyB=$('joyBase'),joyK=$('joyKnob'),bJ=$('btnJump'),bD=$('btnDash'),bA=$('btnAction');
-/* key state shared by joystick + buttons (several sources can hold the same key) */
+/* key state shared by all touch buttons (several sources can hold the same key) */
 const H={};
 const setKey=(code,src,on)=>{const h=H[code]||(H[code]={});const was=Object.keys(h).length>0;if(on)h[src]=1;else delete h[src];const now=Object.keys(h).length>0;if(now&&!was)pre[code]=1;if(now||was)K[code]=now?1:0};
-/* ---------- Virtual joystick (touch events) ---------- */
-const JMAX=40,JTH=70*.3;let jid=null,jc={x:0,y:0};
-const jset=(l,r,u,d)=>{setKey('KeyA','joy',l);setKey('KeyD','joy',r);setKey('Space','joy',u);setKey('KeyS','joy',d)};
-const jmove=t=>{const x0=t.clientX-jc.x,y0=t.clientY-jc.y,len=Math.hypot(x0,y0)||1,k=Math.min(1,JMAX/len),dx=x0*k,dy=y0*k;joyK.style.transform='translate('+dx+'px,'+dy+'px)';jset(dx<-JTH,dx>JTH,dy<-JTH,dy>JTH)};
-const jreset=()=>{jid=null;joyK.style.transform='';jset(0,0,0,0)};
-joyB.addEventListener('touchstart',e=>{e.preventDefault();au();if(jid!==null)return;const t=e.changedTouches[0];jid=t.identifier;const r=joyB.getBoundingClientRect();jc={x:r.left+r.width/2,y:r.top+r.height/2};jmove(t)},{passive:false});
-joyB.addEventListener('touchmove',e=>{e.preventDefault();for(const t of e.changedTouches)if(t.identifier===jid)jmove(t)},{passive:false});
-const jend=e=>{for(const t of e.changedTouches)if(t.identifier===jid){e.preventDefault();jreset()}};
-joyB.addEventListener('touchend',jend,{passive:false});joyB.addEventListener('touchcancel',jend,{passive:false});
-joyB.addEventListener('contextmenu',e=>e.preventDefault());
-/* ---------- Buttons ---------- */
 const rel=[];
-const bind=(el,getKey)=>{let pid=null,code=null;
-const dn=ev=>{ev.preventDefault();au();if(pid!==null)return;pid=ev.pointerId;try{el.setPointerCapture(pid)}catch(_){}code=getKey();setKey(code,el.id,1);el.classList.add('active')};
-const up=ev=>{if(ev.pointerId!==pid)return;ev.preventDefault();setKey(code,el.id,0);pid=null;code=null;el.classList.remove('active')};
+const bind=(el,code)=>{let pid=null;
+const dn=ev=>{ev.preventDefault();au();if(pid!==null)return;pid=ev.pointerId;try{el.setPointerCapture(pid)}catch(_){}setKey(code,el.id,1);el.classList.add('active')};
+const up=ev=>{if(ev.pointerId!==pid)return;ev.preventDefault();setKey(code,el.id,0);pid=null;el.classList.remove('active')};
 ['pointerup','pointercancel','lostpointercapture'].forEach(n=>el.addEventListener(n,up));el.addEventListener('pointerdown',dn);el.addEventListener('contextmenu',ev=>ev.preventDefault());
-rel.push(()=>{if(code!==null)setKey(code,el.id,0);pid=null;code=null;el.classList.remove('active')})};
-/* ACTION button: one button, function depends on context */
-const AK={DASH:'ShiftLeft',ECHO:'KeyR',FLIP:'KeyQ'},AI={DASH:'⚡',ECHO:'◎',FLIP:'⇅'};let aMode='DASH';
-bind(bJ,()=>'Space');bind(bD,()=>'ShiftLeft');bind(bA,()=>AK[aMode]);
-const clr=()=>{jreset();rel.forEach(f=>f());for(const c in H)for(const sc in H[c])delete H[c][sc];['KeyA','KeyD','Space','KeyS','ShiftLeft','KeyQ','KeyR'].forEach(c=>K[c]=0)};
+rel.push(()=>{if(pid!==null)setKey(code,el.id,0);pid=null;el.classList.remove('active')})};
+bind($('mobLeft'),'KeyA');bind($('mobRight'),'KeyD');
+bind($('mobSlide'),'KeyS');bind($('mobJump'),'Space');
+bind($('mobFlip'),'KeyQ');bind($('mobDash'),'ShiftLeft');bind($('mobEcho'),'KeyR');
+const clr=()=>{rel.forEach(f=>f());for(const c in H)for(const sc in H[c])delete H[c][sc];['KeyA','KeyD','Space','KeyS','ShiftLeft','KeyQ','KeyR'].forEach(c=>K[c]=0)};
 addEventListener('blur',clr);document.addEventListener('visibilitychange',clr);
-/* ---------- Context detection for ACTION button (called every frame, DOM touched only on change) ---------- */
-window.updateTouchButtons=function(){
-  if(!touch||!L_)return;
-  const q=p,S=SOL;let m='DASH';
-  /* 1. ECHO: near a plate */
-  for(const pl of L_.pl){if(Math.abs((pl.x0+pl.x1)/2-q.x)<3.5){m='ECHO';break}}
-  /* 2. FLIP: platform within 8 units in the flip direction (above head when gd>0, below feet when gd<0) */
-  if(m==='DASH'){
-    if(q.gd>0){const top=q.y+q.h/2;for(const s of S){const d=s.y0-top;if(d>0&&d<8&&q.x>=s.x0&&q.x<=s.x1){m='FLIP';break}}}
-    else{const bot=q.y-q.h/2;for(const s of S){const d=bot-s.y1;if(d>0&&d<8&&q.x>=s.x0&&q.x<=s.x1){m='FLIP';break}}}
-  }
-  /* 3. otherwise DASH */
-  if(m!==aMode){aMode=m;bA.innerHTML='<i>'+AI[m]+'</i>'+m}
-};
 }
-menu();if(touch)document.querySelector('.ctl').textContent='Touch: joystick = run / jump / slide (down) - JUMP (tap twice = double jump) - DASH - ACTION (flip / echo, changes with context)';LP(60);requestAnimationFrame(()=>{LP(100);setTimeout(()=>{let w=0;const hd=()=>{if(!LPfull()&&w++<30)return setTimeout(hd,50);$('loader').style.display='none';clearInterval(window.LTI);cgLoading(false)};hd()},300)});
+menu();if(touch)document.querySelector('.ctl').textContent='Touch: ◀ ▶ = run - JUMP (tap twice = double jump) - SLIDE - FLIP - DASH - ECHO';LP(60);requestAnimationFrame(()=>{LP(100);setTimeout(()=>{let w=0;const hd=()=>{if(!LPfull()&&w++<30)return setTimeout(hd,50);$('loader').style.display='none';clearInterval(window.LTI);cgLoading(false)};hd()},300)});
 })();
 </script>
 </body></html>
